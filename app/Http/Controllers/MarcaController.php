@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
@@ -19,7 +20,6 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        // $marca = Marca::all();
         $marca = $this->marca->all();
         return response()->json($marca, 200);
     }
@@ -29,10 +29,13 @@ class MarcaController extends Controller
      */
     public function store(Request $request)
     {
-        // $marca = Marca::create($request->all());
-        //statelass
         $request->validate($this->marca->rules(), $this->marca->feedback());
-        $marca = $this->marca->create($request->all());
+        $imagem = $request->file('imagem');
+        $imagemUrn = $imagem->store('imagens/marcas', 'public');
+        $marca = $this->marca->create([
+            'nome' => $request->nome,
+            'imagem' => $imagemUrn
+        ]);
         return response()->json($marca, 201);
     }
 
@@ -52,7 +55,7 @@ class MarcaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
+    { 
         $marca = $this->marca->find($id);
         if ($marca === null) {
             return response()->json(["error" => "Não foi possível realizar atualização. O recurso solicitado não existe."], 404);
@@ -70,7 +73,15 @@ class MarcaController extends Controller
         } else {
             $request->validate($marca->rules(), $marca->feedback());
         }
-        $marca->update($request->all());
+        if($request->file('imagem')){
+            Storage::disk('public')->delete($marca->imagem);
+        }
+        $imagem = $request->file('imagem');
+        $imagemUrn = $imagem->store('imagens/marcas', 'public');
+        $marca->update([
+            'nome' => $request->nome,
+            'imagem' => $imagemUrn
+        ]);
         return response()->json($marca, 200);
     }
 
@@ -81,6 +92,7 @@ class MarcaController extends Controller
     {
         $marca = $this->marca->find($id);
         $response = [];
+        Storage::disk('public')->delete($marca->imagem);
         if ($marca && $marca->delete()) {
             $response = response()->json(["success" => "A marca foi removida com sucesso."], 200);
         } else {
