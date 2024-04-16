@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\ModeloController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +28,4 @@ Route::apiResource('cliente', 'App\Http\Controllers\ClienteController');
 Route::apiResource('carro', 'App\Http\Controllers\CarroController');
 Route::apiResource('locacao', 'App\Http\Controllers\LocacaoController');
 Route::apiResource('marca', MarcaController::class);
-Route::apiResource('modelo', 'App\Http\Controllers\ModeloController');
+Route::apiResource('modelo', ModeloController::class);

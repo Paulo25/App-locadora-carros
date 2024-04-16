@@ -33,8 +33,8 @@ class MarcaController extends Controller
         $imagem = $request->file('imagem');
         $imagemUrn = $imagem->store('imagens/marcas', 'public');
         $marca = $this->marca->create([
-            'nome' => $request->nome,
-            'imagem' => $imagemUrn
+            'nome'      => $request->nome,
+            'imagem'    => $imagemUrn
         ]);
         return response()->json($marca, 201);
     }
@@ -48,7 +48,7 @@ class MarcaController extends Controller
         if ($marca === null) {
             return  response()->json(["error" => "O recurso pesquisado não existe."], 404);
         }
-        return $marca;
+        return response()->json($marca, 200);
     }
 
     /**
@@ -79,8 +79,8 @@ class MarcaController extends Controller
         $imagem = $request->file('imagem');
         $imagemUrn = $imagem->store('imagens/marcas', 'public');
         $marca->update([
-            'nome' => $request->nome,
-            'imagem' => $imagemUrn
+            'nome'      => $request->nome,
+            'imagem'    => $imagemUrn
         ]);
         return response()->json($marca, 200);
     }
@@ -91,13 +91,11 @@ class MarcaController extends Controller
     public function destroy($id)
     {
         $marca = $this->marca->find($id);
-        $response = [];
-        Storage::disk('public')->delete($marca->imagem);
-        if ($marca && $marca->delete()) {
-            $response = response()->json(["success" => "A marca foi removida com sucesso."], 200);
-        } else {
-            $response = response()->json(["error" => "O recurso não exite."], 404);
+        if($marca === null){
+            return response()->json(["error" => "O recurso pesquisado não existe"], 404);
         }
-        return $response;
+        Storage::disk('public')->delete($marca->imagem);
+        $marca->delete();
+        return response()->json(["success" => "O modelo foi removido com sucesso."], 200);
     }
 }
