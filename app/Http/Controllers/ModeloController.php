@@ -20,7 +20,7 @@ class ModeloController extends Controller
      */
     public function index()
     {
-        return response()->json($this->modelo->all(), 200);
+        return response()->json($this->modelo->with('marca')->get(), 200);
     }
 
     /**
@@ -48,7 +48,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->find($id);
+        $modelo = $this->modelo->with('marca')->find($id);
         if ($modelo === null) {
             return response()->json(["error" => "O recurso pesquisado não existe"], 404);
         }
@@ -75,7 +75,7 @@ class ModeloController extends Controller
         } else {
             $request->validate($modelo->rules());
         }
-        if($request->file('imagem')){
+        if ($request->file('imagem')) {
             Storage::disk('public')->delete($modelo->imagem);
         }
         $imagem = $request->file('imagem');

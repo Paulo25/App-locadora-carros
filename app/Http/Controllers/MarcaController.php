@@ -20,7 +20,7 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        $marca = $this->marca->all();
+        $marca = $this->marca->with('modelos')->get();
         return response()->json($marca, 200);
     }
 
@@ -44,7 +44,7 @@ class MarcaController extends Controller
      */
     public function show($id)
     {
-        $marca = $this->marca->find($id);
+        $marca = $this->marca->with('modelos')->find($id);
         if ($marca === null) {
             return  response()->json(["error" => "O recurso pesquisado não existe."], 404);
         }
@@ -55,7 +55,7 @@ class MarcaController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    { 
+    {
         $marca = $this->marca->find($id);
         if ($marca === null) {
             return response()->json(["error" => "Não foi possível realizar atualização. O recurso solicitado não existe."], 404);
@@ -73,7 +73,7 @@ class MarcaController extends Controller
         } else {
             $request->validate($marca->rules(), $marca->feedback());
         }
-        if($request->file('imagem')){
+        if ($request->file('imagem')) {
             Storage::disk('public')->delete($marca->imagem);
         }
         $imagem = $request->file('imagem');
@@ -91,7 +91,7 @@ class MarcaController extends Controller
     public function destroy($id)
     {
         $marca = $this->marca->find($id);
-        if($marca === null){
+        if ($marca === null) {
             return response()->json(["error" => "O recurso pesquisado não existe"], 404);
         }
         Storage::disk('public')->delete($marca->imagem);
