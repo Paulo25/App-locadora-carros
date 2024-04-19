@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Modelo;
+use App\Repositories\ModeloRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ModeloController extends Controller
 {
-    protected object $modelo;
+    private object $modelo;
 
     public function __construct(Modelo $modelo)
     {
@@ -18,34 +20,28 @@ class ModeloController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $modelos = [];
+        $modeloRepository = new ModeloRepository($this->modelo);
         if ($request->has('atributos_marca')) {
-            $modelos = $this->modelo->with('marca:id,' . $request->atributos_marca);
+            $atributosModelos = 'marca:id,' . $request->atributos_marca;
+            $modeloRepository->selecionarAtributosRegistrosRelacionados($atributosModelos);
         } else {
-            $modelos = $this->modelo->with('marca');
+            $modeloRepository->selecionarAtributosRegistrosRelacionados('marca');
         }
         if ($request->has('filtro')) {
-            $filtros = explode(';', $request->filtro );
-            foreach ($filtros as $key => $condicao) {
-                $parametros = explode(':', $condicao);
-                $modelos = $modelos->where($parametros[0], $parametros[1], $parametros[2]);
-            }
+            $modeloRepository->filtrar($request->filtro);
         }
-        
         if ($request->has('atributos')) {
-            $modelos = $modelos->selectRaw($request->atributos)->get();
-        } else {
-            $modelos = $modelos->get();
-        }
-        return response()->json($modelos, 200);
+            $modeloRepository->selecionarAtributos($request->atributos);
+        } 
+        return response()->json($modeloRepository->obterResultado(), 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate($this->modelo->Rules());
         $imagem = $request->file('imagem');
@@ -65,7 +61,7 @@ class ModeloController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $modelo = $this->modelo->with('marca')->find($id);
         if ($modelo === null) {
@@ -77,7 +73,7 @@ class ModeloController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $modelo = $this->modelo->find($id);
         if ($modelo === null) {
@@ -108,7 +104,7 @@ class ModeloController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $modelo = $this->modelo->find($id);
         if ($modelo === null) {

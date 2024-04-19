@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Marca;
+use App\Repositories\MarcaRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
-    private object $marca;
+    private $marca;
 
     public function __construct(Marca $marca)
     {
@@ -18,33 +20,28 @@ class MarcaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
-        $marcas = [];
+        $marcaRepository = new MarcaRepository($this->marca);
         if ($request->has('atributos_modelos')) {
-            $marcas = $this->marca->with('modelos:id,' . $request->atributos_modelos);
+            $atributosModelos = 'modelos:id,' . $request->atributos_modelos;
+            $marcaRepository->selecionarAtributosRegistrosRelacionados($atributosModelos);
         } else {
-            $marcas = $this->marca->with('modelos');
+            $marcaRepository->selecionarAtributosRegistrosRelacionados('modelos');
         }
         if ($request->has('filtro')) {
-            $filtros = explode(';', $request->filtro );
-            foreach ($filtros as $key => $condicao) {
-                $parametros = explode(':', $condicao);
-                $marcas = $marcas->where($parametros[0], $parametros[1], $parametros[2]);
-            }
+            $marcaRepository->filtrar($request->filtro);
         }
         if ($request->has('atributos')) {
-            $marcas = $marcas->selectRaw($request->atributos)->get();
-        } else {
-            $marcas = $marcas->get();
-        }
-        return response()->json($marcas, 200);
+            $marcaRepository->selecionarAtributos($request->atributos);
+        } 
+        return response()->json($marcaRepository->obterResultado(), 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate($this->marca->rules(), $this->marca->feedback());
         $imagem = $request->file('imagem');
@@ -59,7 +56,7 @@ class MarcaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $marca = $this->marca->with('modelos')->find($id);
         if ($marca === null) {
@@ -71,7 +68,7 @@ class MarcaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         $marca = $this->marca->find($id);
         if ($marca === null) {
@@ -98,13 +95,13 @@ class MarcaController extends Controller
         $marca->fill($request->all());
         $marca->imagem = $imagemUrn;
         $marca->save();
-        return response()->json($marca, 200);
+        return response()->json($marca, 200); 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $marca = $this->marca->find($id);
         if ($marca === null) {
