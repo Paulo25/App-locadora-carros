@@ -37,4 +37,10 @@ class Modelo extends Model
     {
         return $this->belongsTo(Marca::class);
     }
+
+    //um modelo pertece a N carros
+    public function carros()
+    {
+        return $this->hasMany(Carro::class);
+    }
 }

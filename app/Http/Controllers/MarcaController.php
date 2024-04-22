@@ -109,6 +109,6 @@ class MarcaController extends Controller
         }
         Storage::disk('public')->delete($marca->imagem);
         $marca->delete();
-        return response()->json(["success" => "O modelo foi removido com sucesso."], 200);
+        return response()->json(["success" => "A marca foi removida com sucesso."], 200);
     }
 }

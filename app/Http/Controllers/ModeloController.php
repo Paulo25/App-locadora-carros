@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ModeloController extends Controller
 {
-    private object $modelo;
+    private $modelo;
 
     public function __construct(Modelo $modelo)
     {
@@ -112,6 +112,6 @@ class ModeloController extends Controller
         }
         Storage::disk('public')->delete($modelo->imagem);
         $modelo->delete();
-        return response()->json(["success" => "A marca foi removida com sucesso."], 200);
+        return response()->json(["success" => "O modelo foi removido com sucesso."], 200);
     }
 }
