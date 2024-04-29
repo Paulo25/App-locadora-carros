@@ -27,11 +27,13 @@ Route::get('/', function(){
     return ['teste' => 'ok'];
 });
 
-Route::apiResource('locacao', LocacaoController::class);
-Route::apiResource('cliente', ClienteController::class);
-Route::apiResource('carro', CarroController::class);
-Route::apiResource('marca', MarcaController::class);
-Route::apiResource('modelo', ModeloController::class);
+Route::prefix('v1')->middleware('jwt.auth')->group(function(){
+    Route::apiResource('locacao', LocacaoController::class);
+    Route::apiResource('cliente', ClienteController::class);
+    Route::apiResource('carro', CarroController::class);
+    Route::apiResource('marca', MarcaController::class);
+    Route::apiResource('modelo', ModeloController::class);
+});
 
 Route::post('login', 'App\Http\Controllers\AuthController@login');
 Route::post('logout', 'App\Http\Controllers\AuthController@logout');
