@@ -1,56 +1,31 @@
 <template>
-    <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Login</div>
-                <div class="card-body">
-                    <form method="POST" action="" @submit.prevent="login($event)">
-                        <input type="hidden" name="_token" :value="csrf_token"/>
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">E-mail</label>
-
-                            <div class="col-md-6">
-                                <input v-model="email" id="email" type="email" class="form-control" name="email" value="" required autocomplete="email" autofocus>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Senha</label>
-
-                            <div class="col-md-6">
-                                <input v-model="password" id="password" type="password" class="form-control" name="password" required autocomplete="current-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember">
-
-                                    <label class="form-check-label" for="remember">
-                                        Lembre-me
-                                    </label>
+    <section>
+        <div class="container py-6 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+                        <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                        <p class="text-white-50 mb-5">Por favor insira seu login e senha!</p>
+                            <form method="POST" action="" @submit.prevent="login($event)">
+                                <input type="hidden" name="_token" :value="csrf_token"/>
+                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    <input v-model="email" id="id-email" type="email" placeholder="Email" class="form-control form-control-lg"
+                                    name="email" value="" required autocomplete="email" autofocus>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-                                    <a class="btn btn-link" href="">
-                                        Esqueceu sua senha?
-                                    </a>
-                            </div>
-                        </div>
-                    </form>
+                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    <input v-model="password" id="id-password" type="password" placeholder="Senha" class="form-control form-control-lg"
+                                    name="password" required autocomplete="current-password">
+                                </div>
+                                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Esqueceu a senha?</a></p>
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                            </form>
+                    </div>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
 </template>
 
 <script>
