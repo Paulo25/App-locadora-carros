@@ -17,9 +17,11 @@ const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import LoginComponent from './components/Login.vue';
+import HomeComponent from './components/Home.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('login-component', LoginComponent);
+app.component('home-component', HomeComponent);
 
 
 /**
