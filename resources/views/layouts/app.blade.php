@@ -19,8 +19,8 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body>
-    <div id="app" class="main-gradient-custom">
+<body class="main-gradient-custom">
+    <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -96,7 +96,7 @@
                 </div>
             </div>
         </nav>
-        <main class="py-5 vh-100">
+        <main class="py-5">
             @yield('content')
         </main>
     </div>

@@ -21,6 +21,7 @@ import HomeComponent from './components/Home.vue';
 import MarcasComponent from './components/Marcas.vue';
 import InputContainerComponent from './components/InputContainer.vue';
 import TableComponent from './components/Table.vue';
+import CardComponent from './components/Card.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('login-component', LoginComponent);
@@ -28,6 +29,7 @@ app.component('home-component', HomeComponent);
 app.component('marcas-component', MarcasComponent);
 app.component('input-container-component',  InputContainerComponent);
 app.component('table-component',  TableComponent);
+app.component('card-component',  CardComponent);
 
 
 /**
