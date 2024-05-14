@@ -23,7 +23,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{route('home')}}">
                     <span style="font-family: 'Arial Black', sans-serif; font-size: 1.5rem; color: #FF5733;">AlugaAuto</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -96,6 +96,16 @@
                 </div>
             </div>
         </nav>
+
+        @auth
+            <nav class="navbar-light bg-light" aria-label="breadcrumb" style="margin: 10px; border-radius: 10px;">
+                <ol class="breadcrumb" style="padding: 5px 15px;">
+                    <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{Route::currentRouteName()}}</li>
+                </ol>
+            </nav>
+        @endauth
+
         <main class="py-5">
             @yield('content')
         </main>
