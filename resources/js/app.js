@@ -23,6 +23,8 @@ import InputContainerComponent from './components/InputContainer.vue';
 import TableComponent from './components/Table.vue';
 import CardComponent from './components/Card.vue';
 import ModalComponent from './components/Modal.vue';
+import AlertComponent from './components/Alert.vue';
+import Paginate from './components/Paginate.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('login-component', LoginComponent);
@@ -32,6 +34,8 @@ app.component('input-container-component',  InputContainerComponent);
 app.component('table-component',  TableComponent);
 app.component('card-component',  CardComponent);
 app.component('modal-component',  ModalComponent);
+app.component('alert-component',  AlertComponent);
+app.component('paginate-component',  Paginate);
 
 
 /**
